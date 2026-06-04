@@ -1,0 +1,8 @@
+flask
+langchain
+langchain-google-genai
+langchain-community
+faiss-cpu 
+pyPDF2
+python-dotenv
+google-generativeai

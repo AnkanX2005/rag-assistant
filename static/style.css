@@ -1,0 +1,24 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f4f8; }
+.container { max-width: 800px; margin: 40px auto; padding: 20px; }
+h1 { color: #1F4E79; margin-bottom: 8px; }
+.subtitle { color: #666; margin-bottom: 24px; }
+.upload-box { background: white; padding: 20px;
+  border-radius: 12px; margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+input[type="file"] { margin-bottom: 10px; display: block; }
+button { background: #1F4E79; color: white; border: none;
+  padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+button:hover { background: #2E75B6; }
+.chat-box { background: white; border-radius: 12px; padding: 20px;
+  height: 400px; overflow-y: auto; margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.message { margin: 10px 0; padding: 10px 14px;
+  border-radius: 10px; max-width: 80%; }
+.message.user { background: #1F4E79; color: white; margin-left: auto; }
+.message.bot { background: #E8F0FE; color: #333; }
+.message.source { background: #FFF8E1; color: #555;
+  font-size: 0.85em; font-style: italic; }
+.input-row { display: flex; gap: 10px; }
+.input-row input { flex: 1; padding: 12px; border: 1px solid #ccc;
+  border-radius: 8px; font-size: 16px; }

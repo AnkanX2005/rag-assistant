@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAG Knowledge Assistant</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📄 RAG Knowledge Assistant</h1>
+    <p class="subtitle">Upload a PDF and ask anything about it</p>
+
+    <!-- Upload Section -->
+    <div class="upload-box">
+      <input type="file" id="pdfFile" accept=".pdf" placeholder="input">
+      <button onclick="uploadPDF()">Upload & Process PDF</button>
+      <p id="uploadStatus"></p>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="chat-box" id="chatBox"></div>
+
+    <!-- Question Input -->
+    <div class="input-row">
+      <input type="text" id="questionInput"
+             placeholder="Ask a question about your document..."
+             onkeypress="if(event.key==='Enter') askQuestion()">
+      <button onclick="askQuestion()">Ask</button>
+    </div>
+  </div>
+
+  <script>
+    async function uploadPDF() {
+      const file = document.getElementById('pdfFile').files[0];
+      if (!file) return alert('Please select a PDF first');
+
+      const status = document.getElementById('uploadStatus');
+      status.textContent = '⏳ Processing PDF...';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      status.textContent = data.message || data.error;
+    }
+
+    async function askQuestion() {
+      const input = document.getElementById('questionInput');
+      const question = input.value.trim();
+      if (!question) return;
+
+      appendMessage('user', question);
+      input.value = '';
+      appendMessage('bot', '⏳ Thinking...');
+
+      const res = await fetch('/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question })
+      });
+
+      const data = await res.json();
+
+      // Remove thinking message
+      const chatBox = document.getElementById('chatBox');
+      chatBox.removeChild(chatBox.lastChild);
+
+      appendMessage('bot', data.answer);
+
+      // Show sources
+      if (data.sources && data.sources.length > 0) {
+        appendMessage('source',
+          '📎 Source: "' + data.sources[0] + '"');
+      }
+    }
+
+    function appendMessage(type, text) {
+      const chatBox = document.getElementById('chatBox');
+      const div = document.createElement('div');
+      div.className = 'message ' + type;
+      div.textContent = text;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
